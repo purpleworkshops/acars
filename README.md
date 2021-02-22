@@ -2,7 +2,7 @@
 
 Makes it easier to transmit StatsD-like metrics to Radar.
 
-* You MUST define an environment variable named `ACARS_KEY` that holds your secret API key for Radar.
+* You MUST define an environment variable named `ACARS_KEY` that holds your secret API key for Radar.  Ask Jeff for your API key.
 * At the moment, this gem only supports transmitting "gauge"-style metrics.
 
 ## Installation
