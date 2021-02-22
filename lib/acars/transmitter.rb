@@ -24,7 +24,7 @@ module Acars
           else
             puts "Transmitting ACARS: #{name}=#{value}"
             response = Net::HTTP.post URI(RADAR_DOMAIN + path), "key=#{Transmitter::KEY}"
-            if ![200..299].include?(response.code.to_i)
+            if !(200..299).include?(response.code.to_i)
               puts "ACARS ERROR: #{response.code}: #{response.body}"
             end
           end
