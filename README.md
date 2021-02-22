@@ -10,7 +10,7 @@ Makes it easier to transmit StatsD-like metrics to Radar.
 Add this line to the application's Gemfile:
 
 ```ruby
-gem 'acars'
+gem 'acars', git: 'https://github.com/purpleworkshops/acars'
 ```
 
 ## Usage
