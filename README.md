@@ -4,6 +4,7 @@ Makes it easier to transmit StatsD-like metrics to Radar.
 
 * You MUST define an environment variable named `ACARS_KEY` that holds your secret API key for Radar.  Ask Jeff for your API key.
 * At the moment, this gem only supports transmitting "gauge"-style metrics.
+* The special gauge name `heartbeat` is reserved for monitoring your application's "health" status.  Send a `1` to indicate that your application is flying normally, or `0` to send a mayday call.
 
 ## Installation
 
@@ -17,15 +18,16 @@ gem 'acars', git: 'https://github.com/purpleworkshops/acars'
 
 For this example, assume your app name is "research_study".
 
-Here is a sample rake task.
+Here is a sample rake task (but also see the Dry Run example below)
 
 ``` ruby
 desc "Transmit stats"
 task acars: :environment do
   Acars.transmit_for :research_study do |acars|
     acars.gauge participants: Participant.count,
-                events: AppEvent.count
-                messages: Message.count
+                events: AppEvent.count,
+                messages: Message.count,
+                heartbeat: (AppEvent.order(created_at: :desc).first.created_at > 1.hour.ago ? 1 : 0)
     end
 end
 ```
@@ -39,13 +41,18 @@ task acars: :environment do
     acars.gauge participants: Participant.count
     acars.gauge events: AppEvent.count
     acars.gauge messages: Message.count
+    acars.gauge heartbeat: (AppEvent.order(created_at: :desc).first.created_at > 1.hour.ago ? 1 : 0)
   end
 end
 ```
 
-You can also pass a `dry_run:` argument to prevent Acars from actually transmitting data:
+### Dry Run mode
+
+You can also pass a `dry_run: true` argument to prevent Acars from actually transmitting data. 
+For example, this will only transmit stats in production, and emit to `stdout` otherwise:
 
 ``` ruby
-  Acars.transmit_for :research_study, dry_run: true do |acars|
+  Acars.transmit_for :research_study, dry_run: (!Rails.env.production?) do |acars|
+    ...
+  end
 ```
-in which case you'll see a dry run message emitted to `stdout` instead.
