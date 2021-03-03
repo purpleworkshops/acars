@@ -4,7 +4,6 @@ module Acars
     require 'net/http'
     require 'uri'
     RADAR_DOMAIN = "https://sfr-radar.herokuapp.com"
-    KEY = ENV['ACARS_KEY']
 
     def initialize(app_name, dry_run: false)
       @app_name = app_name
@@ -23,7 +22,7 @@ module Acars
             puts "(Dry run) ACARS would transmit: #{name}=#{value}"
           else
             puts "Transmitting ACARS: #{name}=#{value}"
-            response = Net::HTTP.post URI(RADAR_DOMAIN + path), "key=#{Transmitter::KEY}"
+            response = Net::HTTP.post URI(RADAR_DOMAIN + path), "key=#{ENV['ACARS_KEY']}"
             if !(200..299).include?(response.code.to_i)
               puts "ACARS ERROR: #{response.code}: #{response.body}"
             end
