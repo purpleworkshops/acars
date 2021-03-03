@@ -1,9 +1,9 @@
 # Acars
 
-Makes it easier to transmit StatsD-like metrics to Radar.
+Makes it easier to transmit numeric metrics to Radar.
 
 * You MUST define an environment variable named `ACARS_KEY` that holds your secret API key for Radar.  Ask Jeff for your API key.
-* At the moment, this gem only supports transmitting "gauge"-style metrics.
+* At the moment, this gem only supports transmitting "gauge"-style metrics. You can pass a key/value pair to the `.gauge` method where the key is the name of the metric you'd like to report on, and the value is a single numerical value that can change arbitrarily.
 * The special gauge name `heartbeat` is reserved for monitoring your application's "health" status.  Send a `1` to indicate that your application is flying normally, or `0` to send a mayday call.
 
 ## Installation
